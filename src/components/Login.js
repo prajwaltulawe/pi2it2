@@ -1,27 +1,33 @@
 import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from "@tanstack/react-query";
+import { postLoginQuery } from '../hooks/authoriztionQueries'
 
 const Login = (props) => {
     const [credentials, setCredentials] = useState({email: "", password: ""});
     const navigate = useNavigate();
 
+    const { mutate } = useMutation(postLoginQuery, {
+        onSuccess: (result) => {
+            console.log("Mutation succeeded:", result);
+            if (result && result.success) {
+              navigate("/");
+              props.showAlert("Successfully LogedIn", "warning");
+            } else {
+              props.showAlert("Invalid Credentials", "alert");
+            }
+          },
+          onError: (error) => {
+            console.error("Error submitting data:", error.message);
+          }
+    })
+
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
-        const loginResponse = await fetch(`http://localhost:5000/api/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({email: credentials.email, password: credentials.password }),
-        });
-
-        const response = await loginResponse.json();
-        if (response.success) {
-            localStorage.setItem('token', response.authToken);
-            navigate('/');
-            props.showAlert("Successfully LogedIn", "warning")
-        } else{
-            props.showAlert("Invalid Credentials", "alert")
+        try {
+            mutate({ email: credentials.email, password: credentials.password});
+        } catch (error) {
+            console.error("Error submitting data:", error.message);
         }
     };
 
