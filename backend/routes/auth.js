@@ -25,7 +25,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success, errors: errors.array() });
+      return res.status(406).json({ success, error: errors.array()[0].msg });
     }
 
     // CHECK WHETHER USER EXISTS OR NOT
@@ -33,8 +33,8 @@ router.post(
       let user = await User.findOne({ email: req.body.email });
       if (user) {
         return res
-          .status(400)
-          .json({ error: "Email id already registered..!" });
+          .status(409)
+          .json({ success, error: "Email id already registered..!" });
       }
 
       const salt = await bycrypt.genSalt(10);
@@ -55,7 +55,7 @@ router.post(
       res.json({ success, authToken });
       success = false;
     } catch (error) {
-      res.status(500).send("Some Error Occoured");
+      res.status(500).json( {success, error: "Some Error Occoured"});
     }
   }
 );
@@ -71,7 +71,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       success = false;
-      return res.status(400).json({ success, errors: errors.array() });
+      return res.status(406).json({ success, error: errors.array()[0].msg });
     }
 
     const { email, password } = req.body;
@@ -101,7 +101,7 @@ router.post(
       success = true;
       res.json({ success, authToken });
     } catch (error) {
-      res.status(500).send("Some Error Occoured");
+      res.status(500).json( {success, error: "Some Error Occoured"});
     }
   }
 );

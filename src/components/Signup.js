@@ -27,7 +27,7 @@ const Signup = () => {
       }
     },
     onError: (error) => {
-      console.log({error})
+      console.error("Error submitting data:", error.message);
     },
   });
 

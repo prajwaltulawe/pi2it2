@@ -6,9 +6,6 @@ export const postSignupQuery = async (userData) => {
         },
         body: JSON.stringify(userData),
     });
-    if (SignupResponse.status === 400) {
-        return SignupResponse.json();
-    }
     return SignupResponse.json();
 };
 
@@ -20,8 +17,5 @@ export const postLoginQuery = async (userData) => {
         },
         body: JSON.stringify(userData),
     });
-    if (!loginResponse.ok) {
-        throw new Error("Failed to create user.");
-    }
     return loginResponse.json();
 };

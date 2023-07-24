@@ -1,21 +1,25 @@
 import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
-import { postLoginQuery } from '../hooks/authoriztionQueries'
+import { postLoginQuery } from '../hooks/authoriztionQueries';
+import { useAlertContext } from "../context/alert/alertContext";
 
 const Login = (props) => {
     const [credentials, setCredentials] = useState({email: "", password: ""});
     const navigate = useNavigate();
+    const { showAlert } = useAlertContext();
 
     const { mutate } = useMutation(postLoginQuery, {
         onSuccess: (result) => {
-            console.log("Mutation succeeded:", result);
             if (result && result.success) {
               navigate("/");
-              props.showAlert("Successfully LogedIn", "warning");
+              showAlert("Successfully LogedIn", "warning");
             } else {
-              props.showAlert("Invalid Credentials", "alert");
+              showAlert("Some error occoured. Plz try again later !", "warning");
             }
+            if (result && result.success === false) {
+                showAlert(result.error, "warning");
+              }
           },
           onError: (error) => {
             console.error("Error submitting data:", error.message);
@@ -27,7 +31,7 @@ const Login = (props) => {
         try {
             mutate({ email: credentials.email, password: credentials.password});
         } catch (error) {
-            console.error("Error submitting data:", error.message);
+            showAlert("Some error occoured. Plz try again later !", "warning");
         }
     };
 
