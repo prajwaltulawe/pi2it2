@@ -4,7 +4,6 @@ const Class = require("../models/Class");
 const Semester = require("../models/Semester");
 const Subject = require("../models/Subject");
 const Practicle = require("../models/Practicle");
-const Post = require("../models/Posts");
 const { body, validationResult } = require("express-validator");
 
 const router = express.Router();

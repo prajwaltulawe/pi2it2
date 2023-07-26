@@ -7,7 +7,8 @@ const PostsSchema = new Schema({
     },
     user_Id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "user",
+        required: true
     },
     link: {
         type: String,
