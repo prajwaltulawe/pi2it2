@@ -80,17 +80,13 @@ router.post(
       let user = await User.findOne({ email });
       if (!user) {
         success = false;
-        return res
-          .status(400)
-          .json({ success, error: "Incorrect credentials !" });
+        return res.status(400).json({ success, error: "Incorrect credentials !" });
       }
 
       const passCompare = await bycrypt.compare(password, user.password);
       if (!passCompare) {
         success = false;
-        return res
-          .status(400)
-          .json({ success, error: "Incorrect credentials !" });
+        return res.status(400).json({ success, error: "Incorrect credentials !" });
       }
       const payLoad = {
         user: {
@@ -99,7 +95,7 @@ router.post(
       };
       const authToken = jwt.sign(payLoad, JWT_SECRET);
       success = true;
-      res.json({ success, authToken });
+      res.json({ success, authToken, userName: user.name });
     } catch (error) {
       res.status(500).json( {success, error: "Some Error Occoured"});
     }

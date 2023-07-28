@@ -13,6 +13,7 @@ const Login = (props) => {
         onSuccess: (result) => {
             if (result && result.success) {
               localStorage.setItem('token', result.authToken);
+              localStorage.setItem('userName', result.userName);
               navigate("/fetchPattern");
               showAlert("Successfully LogedIn", "warning");
             } else {

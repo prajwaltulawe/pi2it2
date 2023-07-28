@@ -111,7 +111,12 @@ async (req, res) => {
 // ADD POST IN POSTS USING GET "/API/ADDEPOST"
 router.post("/addPost", 
 fetchUser,
+[ body("link", "Invalid URL").isURL()],
   async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(406).json({ success, error: errors.array()[0].msg });
+    }
     try {
       const post = new Post({
         practicle_Id: req.body.practicleId,
