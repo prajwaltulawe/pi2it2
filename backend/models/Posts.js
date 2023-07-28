@@ -20,6 +20,10 @@ const PostsSchema = new Schema({
     dislikes: {
         type: Object,
     },
+    timestamp:{
+        type: Date,
+        default: Date.now
+    }
 });
 const Posts = mongoose.model("posts", PostsSchema);
 module.exports = Posts;

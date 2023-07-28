@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { getPracticleQuery } from '../hooks/nextTargetQueries';
-import { addPostQuery } from '../hooks/practiclePostsQueries';
+import { addPostQuery, deletePostQuery, editPostQuery } from '../hooks/practiclePostsQueries';
 import { useTargetContext } from "../context/nextTarget/targetContext";
 import { useAlertContext } from "../context/alert/alertContext";
 
@@ -11,11 +11,12 @@ const Practicle = () => {
     const { practicles, setPracticle } = useTargetContext();
     const { showAlert } = useAlertContext();
     const [addPostLink, setAddPostLink] = useState("");
+    const [editPostLink, setEditPostLink] = useState("");
+    const [editPostId, setEditPostId] = useState("");
     const closeAddPostModal = useRef("");
     const post = [];
     const [posts, setPosts] = useState(post)
     
-
     const { data, mutate : getPracticleData } = useMutation(getPracticleQuery, {
         mutationKey: "getPracticle",
         onSuccess: (result) => {
@@ -30,7 +31,6 @@ const Practicle = () => {
             console.error("Error submitting data:", error.message);
           }
     })
-
     useEffect(() => {
         if (localStorage.getItem('token') && practicles) {
           getPracticleData(practicles.id);
@@ -40,34 +40,84 @@ const Practicle = () => {
         // eslint-disable-next-line
       }, []);
 
-      const { data: addPostResponse, mutate : addPost } = useMutation(addPostQuery, {
-        mutationKey: "addPost",
-        onSuccess: (result) => {
-          if (result.status !== 204) {
-            showAlert("Post Added !", "warning");
-            let tempPost = {
-              "_id": result._id,
-              "link": result.link,
-              "username": localStorage.getItem('userName')
-            };
-            setPosts(posts.concat(tempPost));
-          } else if(result.status === 406 || result.status === 500){
-            showAlert("Some error occoured. Plz try again later !", "warning");
-          }
-          if (result && result.success === false) {
-            showAlert(result.error, "warning");
-          }
-          },
-          onError: (error) => {
-            console.error("Error submitting data:", error.message);
-          }
-      })
+    const { data: addPostResponse, mutate : addPost } = useMutation(addPostQuery, {
+      mutationKey: "addPost",
+      onSuccess: (result) => {
+        if (result.status !== 204) {
+          showAlert("Post Added !", "warning");
+          let tempPost = {
+            "_id": result._id,
+            "link": result.link,
+            "username": localStorage.getItem('userName'),
+            "timestamp": new Date(Date.now()).toISOString().substring(0,10)
+          };
+          setPosts(posts.concat(tempPost));
+        } else if(result.status === 406 || result.status === 500){
+          showAlert("Some error occoured. Plz try again later !", "warning");
+        }
+        if (result && result.success === false) {
+          showAlert(result.error, "warning");
+        }
+        },
+        onError: (error) => {
+          console.error("Error submitting data:", error.message);
+        }
+    })
+    const addPostFunction = async (e) => {
+      e.preventDefault();
+      addPost({"link": addPostLink, "practicleId" : practicles.id});
+      closeAddPostModal.current.click();
+    };
 
-      const addPostFunction = async (e) => {
-        e.preventDefault();
-        addPost({"link": addPostLink, "practicleId" : practicles.id});
-        closeAddPostModal.current.click();
-      };
+    const { data: editPostResponse, mutate : editPost } = useMutation(editPostQuery, {
+      mutationKey: "editPost",
+      onSuccess: (result) => {
+        if (result.status !== 204) {
+          showAlert("Post Edites !", "warning");
+        } else if(result.status === 406 || result.status === 500){
+          showAlert("Some error occoured. Plz try again later !", "warning");
+        }
+        if (result && result.success === false) {
+          showAlert(result.error, "warning");
+        }
+        },
+        onError: (error) => {
+          console.error("Error submitting data:", error.message);
+        }
+    })
+    const setEditPost = (post) => {
+      setEditPostLink(post.link);
+      setEditPostId(post._id);
+    }
+
+    const editPostFunction= () => {
+      editPost({editPostId, editPostLink});
+      console.log(editPostId, editPostLink);
+    }
+
+    const { data: deletePostResponse, mutate : deletePost } = useMutation(deletePostQuery, {
+      mutationKey: "deletePost",
+      onSuccess: (result) => {
+        if (result.status !== 204) {
+          showAlert("Post Deleted !", "warning");
+        } else if(result.status === 406 || result.status === 500){
+          showAlert("Some error occoured. Plz try again later !", "warning");
+        }
+        if (result && result.success === false) {
+          showAlert(result.error, "warning");
+        }
+        },
+        onError: (error) => {
+          console.error("Error submitting data:", error.message);
+        }
+    })
+    const deletePostFunction = (id) => {
+      deletePost(id);
+      const newPosts = posts.filter((post) => {
+        return post._id !== id;
+      });
+      setPosts(newPosts);
+    }
 
     return (
         <>
@@ -75,41 +125,59 @@ const Practicle = () => {
           <div className="container m-auto mt-4 d-flex flex-column"> 
           <button className="btn btn-primary col-6 col-sm-6 mt-2 mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal"> ADD NEW POST</button>
           
+          {/* ADD MODAL */}
           <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h1 className="modal-title fs-5" id="exampleModalLabel">
-                    Add Post{" "}
-                  </h1>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <h1 className="modal-title fs-5" id="exampleModalLabel">Add Post</h1> <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
                   <form action="" method="post">
                     <div className="mb-3">
-                      <label htmlFor="link" className="form-label">
-                        Link
-                      </label>
+                      <label htmlFor="link" className="form-label">Link</label>
                       <input type="text" className="form-control" id="link" name="link" value={addPostLink} onChange={(e) => setAddPostLink(e.target.value)}/>
                     </div>
                   </form>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">
-                    Close
-                  </button>
-                  <button type="button" className="btn btn-primary" onClick={addPostFunction}>
-                    Add Post
-                  </button>
+                  <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">Close</button>
+                  <button type="button" className="btn btn-primary" onClick={addPostFunction}>Add Post</button>
                 </div>
               </div>
             </div>
           </div>
     
+          {/* EDIT MODAL */}
+          <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Post</h1> <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div className="modal-body">
+                  <form action="" method="post">
+                    <div className="mb-3">
+                      <label htmlFor="link" className="form-label">Link</label>
+                      <input type="text" className="form-control" id="link" name="link" value={editPostLink} onChange={(e) => {setEditPostLink(e.target.value); console.log(editPostLink)}}/>
+                    </div>
+                  </form>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">Close</button>
+                  <button type="button" className="btn btn-primary" onClick={()=>editPostFunction()}>Edit Post</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {posts && posts.map((practicleItem) => {
               return (
                 <>
-                  <small>{practicleItem.username}</small>
+                  <div className="d-flex flex-row justify-content-between col-10">
+                    <small>{practicleItem.username}</small>
+                    <small>{practicleItem.timestamp && practicleItem.timestamp.substring(0, 10)}</small>
+                  </div>
                   <div className="d-flex w-90 align-items-center justify-content-between">
                     <button className="btn btn-primary col-10" key={practicleItem._id} > {practicleItem.link} </button>
                     <div  className="d-flex">
@@ -123,16 +191,16 @@ const Practicle = () => {
                       </div>
                       {
                         practicleItem.username == localStorage.getItem('userName') && (
-                            <>
-                              <div className="d-flex align-items-center flex-column">
-                              <a href="http://" className="fs-3 mx-2">&#128394;</a>
+                          <>
+                            <div className="d-flex align-items-center flex-column">
+                              <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => setEditPost(practicleItem)} data-bs-toggle="modal" data-bs-target="#editModal">&#128394;</button>
                               <small>Edit</small>
-                              </div>
-                              <div className="d-flex align-items-center flex-column">
-                              <a href="http://" className="fs-3 mx-2">&#10060;</a>
+                            </div>
+                            <div className="d-flex align-items-center flex-column">
+                              <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() =>deletePostFunction(practicleItem._id)}>&#10060;</button>
                               <small>Delete</small>
-                              </div>
-                            </>
+                            </div>
+                          </>
                         )
                       }
                     </div>

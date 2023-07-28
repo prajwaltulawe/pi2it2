@@ -97,6 +97,7 @@ async (req, res) => {
         $project: {
           _id: 1,
           link: 1,
+          timestamp: 1,
           username: '$userDetails.name'
         },
       },
@@ -132,10 +133,15 @@ fetchUser,
 );
 
 // UPDATE NOTE PUT "/API/UPDATE"
-router.put("/updatePost/:id", fetchUser, async (req, res) => {
+router.put("/updatePost/:id", fetchUser,
+[ body("link", "Invalid URL").isURL()],
+async (req, res) => {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(406).json({ success, error: errors.array()[0].msg });
+    }
     try {
       const link = req.body.link;
-
       // CREATE NEW NOTES OBJECT
       const newPost = {};
       if(link) {newPost.link = link}
@@ -147,7 +153,6 @@ router.put("/updatePost/:id", fetchUser, async (req, res) => {
       if(post.user_Id.toString() != req.user.id){
         return res.status(401).send("Not Allowed")
       }
-
       post = await Post.findByIdAndUpdate(req.params.id, {$set: newPost}, {new: true});
       res.json({post});
 
@@ -162,11 +167,11 @@ router.delete("/deletePost/:id", fetchUser, async (req, res) => {
   try {
     // FINDING NOTE TO BE DELETED
     let post = await Post.findById(req.params.id);
-    if (!post) { return res.status(500).send("Not Found");   }
+    if (!post) { return res.status(500).json({ success, error: "Not Found" });}
 
     // CHECK OWNER OF POST
     if(post.user_Id.toString() != req.user.id){
-      return res.status(401).send("Not Allowed")
+      return res.status(401).json({ success, error: "Not Allowed" })
     }
 
     post = await Post.findByIdAndDelete(req.params.id);
