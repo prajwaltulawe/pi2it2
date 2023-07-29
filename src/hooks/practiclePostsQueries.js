@@ -26,7 +26,6 @@ export const deletePostQuery = async (postId) => {
 };
 
 export const editPostQuery = async ({editPostId, editPostLink}) => {
-    console.log(editPostLink);
     const editPostResponse = await fetch(`http://localhost:5000/api/posts/updatePost/${editPostId}`, {
         method: "PUT",
         headers: {
@@ -35,7 +34,6 @@ export const editPostQuery = async ({editPostId, editPostLink}) => {
         },
         body: JSON.stringify({link : editPostLink})
     });
-    console.log(JSON.stringify({link : editPostId}));
     if(editPostResponse.status !== 204){
         return editPostResponse.json();
     }

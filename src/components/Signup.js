@@ -72,7 +72,7 @@ const Signup = () => {
           <input type="password" className="form-control mt-2" id="cpassword" name="cpassword" onChange={onChange}
             value={credentials.cpassword} placeholder="Confirm Password" />
         </div>
-        <button type="submit" disabled={credentials.password !== credentials.cpassword} className="btn btn-primary mt-2">
+        <button type="submit" disabled={(credentials.password !== credentials.cpassword) && credentials.name !== "" && credentials.email !== ""} className="btn btn-primary mt-2">
           Sign up
         </button>
       </form>

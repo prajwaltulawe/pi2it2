@@ -8,16 +8,18 @@ import { useAlertContext } from "../context/alert/alertContext";
 
 const Practicle = () => {
     const navigate = useNavigate();
-    const { practicles, setPracticle } = useTargetContext();
+    const { practicles} = useTargetContext();
     const { showAlert } = useAlertContext();
     const [addPostLink, setAddPostLink] = useState("");
+    const [previousPostLink, setPreviousPostLink] = useState("");
     const [editPostLink, setEditPostLink] = useState("");
     const [editPostId, setEditPostId] = useState("");
-    const closeAddPostModal = useRef("");
+    const closeAddPostModal = useRef(null);
     const post = [];
-    const [posts, setPosts] = useState(post)
-    
-    const { data, mutate : getPracticleData } = useMutation(getPracticleQuery, {
+    const [posts, setPosts] = useState(post);
+
+    // GET ALL POSTS
+    const { mutate : getPracticleData } = useMutation(getPracticleQuery, {
         mutationKey: "getPracticle",
         onSuccess: (result) => {
             if (result.status !== 204) {
@@ -40,10 +42,11 @@ const Practicle = () => {
         // eslint-disable-next-line
       }, []);
 
-    const { data: addPostResponse, mutate : addPost } = useMutation(addPostQuery, {
+    // ADD POSTS
+    const { mutate : addPost } = useMutation(addPostQuery, {
       mutationKey: "addPost",
       onSuccess: (result) => {
-        if (result.status !== 204) {
+        if (result.status !== 204 && result.link) {
           showAlert("Post Added !", "warning");
           let tempPost = {
             "_id": result._id,
@@ -69,15 +72,23 @@ const Practicle = () => {
       closeAddPostModal.current.click();
     };
 
-    const { data: editPostResponse, mutate : editPost } = useMutation(editPostQuery, {
+    // EDIT POST
+    const { mutate : editPost } = useMutation(editPostQuery, {
       mutationKey: "editPost",
       onSuccess: (result) => {
-        if (result.status !== 204) {
-          showAlert("Post Edites !", "warning");
-        } else if(result.status === 406 || result.status === 500){
-          showAlert("Some error occoured. Plz try again later !", "warning");
-        }
-        if (result && result.success === false) {
+        if (result.status !== 204 && result.success !== false) {
+          showAlert("Post Edited !", "warning");
+          let newPosts = JSON.parse(JSON.stringify(posts));
+          for (let index = 0; index < newPosts.length; index++) {
+            const element = newPosts[index];
+            if (element._id === result.post._id) {
+              element.link = result.post.link;
+              element.timestamp = result.post.timestamp.substring(0, 10);
+              break;
+            }
+          }
+          setPosts(newPosts);
+        } else if (result && result.success === false) {
           showAlert(result.error, "warning");
         }
         },
@@ -86,16 +97,20 @@ const Practicle = () => {
         }
     })
     const setEditPost = (post) => {
+      setPreviousPostLink(post.link);
       setEditPostLink(post.link);
       setEditPostId(post._id);
     }
-
     const editPostFunction= () => {
-      editPost({editPostId, editPostLink});
-      console.log(editPostId, editPostLink);
+      if(previousPostLink !== editPostLink){
+        editPost({editPostId, editPostLink});
+      }else{
+        showAlert("No changes found !", "warning");
+      }
     }
 
-    const { data: deletePostResponse, mutate : deletePost } = useMutation(deletePostQuery, {
+    // DELETE POST
+    const { mutate : deletePost } = useMutation(deletePostQuery, {
       mutationKey: "deletePost",
       onSuccess: (result) => {
         if (result.status !== 204) {
@@ -159,7 +174,7 @@ const Practicle = () => {
                   <form action="" method="post">
                     <div className="mb-3">
                       <label htmlFor="link" className="form-label">Link</label>
-                      <input type="text" className="form-control" id="link" name="link" value={editPostLink} onChange={(e) => {setEditPostLink(e.target.value); console.log(editPostLink)}}/>
+                      <input type="text" className="form-control" id="link" name="link" value={editPostLink} onChange={(e) => {setEditPostLink(e.target.value)}}/>
                     </div>
                   </form>
                 </div>
@@ -171,6 +186,7 @@ const Practicle = () => {
             </div>
           </div>
 
+          {/* ALL POSTS */}
           {posts && posts.map((practicleItem) => {
               return (
                 <>
@@ -189,8 +205,9 @@ const Practicle = () => {
                         <a href="http://" className="fs-3 mx-2">&#128078;</a>
                         <small>78</small>
                       </div>
-                      {
-                        practicleItem.username == localStorage.getItem('userName') && (
+
+                      {/* POST AUTHOR OPTIONS */}
+                      {practicleItem.username === localStorage.getItem('userName') && (
                           <>
                             <div className="d-flex align-items-center flex-column">
                               <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => setEditPost(practicleItem)} data-bs-toggle="modal" data-bs-target="#editModal">&#128394;</button>
@@ -201,8 +218,7 @@ const Practicle = () => {
                               <small>Delete</small>
                             </div>
                           </>
-                        )
-                      }
+                        )}
                     </div>
                   </div>
                 </>

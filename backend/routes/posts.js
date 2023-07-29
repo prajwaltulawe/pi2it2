@@ -119,13 +119,20 @@ fetchUser,
       return res.status(406).json({ success, error: errors.array()[0].msg });
     }
     try {
+      // FINDING IF LINK EXISTS
+      let link = await Post.find({ practicle_Id: req.body.practicleId });
+      for(const element of link) {
+        if(element.link == req.body.link){
+          return res.status(500).json({ success, error: "Link already exists" });
+        }
+      };
       const post = new Post({
         practicle_Id: req.body.practicleId,
         user_Id: req.user.id,
         link: req.body.link
       });
       const savePost = await post.save();
-      res.json(savePost);
+      res.status(200).json(savePost);
     } catch (error) {
         res.status(500).send("Some Error Occoured");
     }
@@ -144,20 +151,21 @@ async (req, res) => {
       const link = req.body.link;
       // CREATE NEW NOTES OBJECT
       const newPost = {};
-      if(link) {newPost.link = link}
+      if(link) {newPost.link = link};
+      newPost.timestamp = new Date(Date.now()).toISOString();
 
       // FINDING NOTE TO BE UPDATED
       let post = await Post.findById(req.params.id);
-      if (!post) { return res.status(500).send("Not Found");   }
+      if (!post) { return res.status(500).json({ success, error: "Post Not Found" })};
     
       if(post.user_Id.toString() != req.user.id){
-        return res.status(401).send("Not Allowed")
+        return res.status(401).json({ success, error: "Not Allowed" });
       }
       post = await Post.findByIdAndUpdate(req.params.id, {$set: newPost}, {new: true});
       res.json({post});
 
     } catch (error) {
-        res.status(500).send("Some Error Occoured");
+        res.status(500).json({ success, error: "Some Error Occoured" });
     }
   }
 );
