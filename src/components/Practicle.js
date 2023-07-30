@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { getPracticleQuery } from '../hooks/nextTargetQueries';
-import { addPostQuery, deletePostQuery, editPostQuery } from '../hooks/practiclePostsQueries';
+import { addPostQuery, deletePostQuery, editPostQuery, likePostQuery, dislikePostQuery} from '../hooks/practiclePostsQueries';
 import { useTargetContext } from "../context/nextTarget/targetContext";
 import { useAlertContext } from "../context/alert/alertContext";
 
@@ -71,6 +71,60 @@ const Practicle = () => {
       addPost({"link": addPostLink, "practicleId" : practicles.id});
       closeAddPostModal.current.click();
     };
+
+    const { mutate : likePost } = useMutation(likePostQuery, {
+      mutationKey: "likePost",
+      onSuccess: (result) => {
+        if (result.status !== 204 && result.success !== false) {
+          showAlert("Post Liked !", "warning");
+          let newPosts = JSON.parse(JSON.stringify(posts));
+          for (let index = 0; index < newPosts.length; index++) {
+            const element = newPosts[index];
+            if (element._id === result.post._id) {
+              element.likes = result.post.likes;
+              element.dislikes = result.post.dislikes;
+              break;
+            }
+          }
+          setPosts(newPosts);
+        } else if (result && result.success === false) {
+          showAlert(result.error, "warning");
+        }
+        },
+        onError: (error) => {
+          console.error("Error submitting data:", error.message);
+        }
+    });
+    const likePostFunction = (postId) =>{
+      likePost(postId);
+    }
+
+    const { mutate : dislikePost } = useMutation(dislikePostQuery, {
+      mutationKey: "dislikePost",
+      onSuccess: (result) => {
+        if (result.status !== 204 && result.success !== false) {
+          showAlert("Post Disliked !", "warning");
+          let newPosts = JSON.parse(JSON.stringify(posts));
+          for (let index = 0; index < newPosts.length; index++) {
+            const element = newPosts[index];
+            if (element._id === result.post._id) {
+              element.likes = result.post.likes;
+              element.dislikes = result.post.dislikes;
+              break;
+            }
+          }
+          setPosts(newPosts);
+        } else if (result && result.success === false) {
+          showAlert(result.error, "warning");
+        }
+        },
+        onError: (error) => {
+          console.error("Error submitting data:", error.message);
+        }
+    })
+    const dislikePostFunction = (postId) =>{
+      dislikePost(postId);
+    }
 
     // EDIT POST
     const { mutate : editPost } = useMutation(editPostQuery, {
@@ -198,12 +252,12 @@ const Practicle = () => {
                     <button className="btn btn-primary col-10" key={practicleItem._id} > {practicleItem.link} </button>
                     <div  className="d-flex">
                       <div className="d-flex align-items-center flex-column">
-                        <a href="http://" className="fs-3 mx-1">&#128077;</a>
-                        <small>789</small>
+                        <button className="fs-3 mx-1" style={{ background:"none", border:"none" }} onClick={() => likePostFunction(practicleItem._id)} >&#128077;</button>
+                        <small>{practicleItem.likes ? practicleItem.likes.length : "0"}</small>
                       </div>
                       <div className="d-flex align-items-center flex-column">
-                        <a href="http://" className="fs-3 mx-2">&#128078;</a>
-                        <small>78</small>
+                        <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => dislikePostFunction(practicleItem._id)} >&#128078;</button>
+                        <small>{practicleItem.dislikes ? practicleItem.dislikes.length : "0"}</small>
                       </div>
 
                       {/* POST AUTHOR OPTIONS */}

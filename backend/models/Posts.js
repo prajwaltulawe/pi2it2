@@ -14,12 +14,14 @@ const PostsSchema = new Schema({
         type: String,
         required: true
     },
-    likes: {
-        type: Object,
-    },
-    dislikes: {
-        type: Object,
-    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    }],
+    dislikes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+    }],
     timestamp:{
         type: Date,
         default: Date.now

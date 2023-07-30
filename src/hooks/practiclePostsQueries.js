@@ -38,3 +38,29 @@ export const editPostQuery = async ({editPostId, editPostLink}) => {
         return editPostResponse.json();
     }
 };
+
+export const likePostQuery = async (postId) => {
+    const likePostResponse = await fetch(`http://localhost:5000/api/posts/likePost/${postId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem('token')
+        }
+    });
+    if(likePostResponse.status !== 204){
+        return likePostResponse.json();
+    }
+};
+
+export const dislikePostQuery = async (postId) => {
+    const dislikePostResponse = await fetch(`http://localhost:5000/api/posts/dislikePost/${postId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem('token')
+        }
+    });
+    if(dislikePostResponse.status !== 204){
+        return dislikePostResponse.json();
+    }
+};
