@@ -72,6 +72,7 @@ const Practicle = () => {
       closeAddPostModal.current.click();
     };
 
+    // LIKE POST 
     const { mutate : likePost } = useMutation(likePostQuery, {
       mutationKey: "likePost",
       onSuccess: (result) => {
@@ -99,6 +100,7 @@ const Practicle = () => {
       likePost(postId);
     }
 
+    // DISLIKE POST
     const { mutate : dislikePost } = useMutation(dislikePostQuery, {
       mutationKey: "dislikePost",
       onSuccess: (result) => {
