@@ -1,5 +1,7 @@
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
 export const getPatternsQuery = async () => {
-    const PatternResponse = await fetch(`http://localhost:5000/api/posts/fetchPattern`, {
+    const PatternResponse = await fetch(`${baseUrl}api/posts/fetchPattern`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -10,7 +12,7 @@ export const getPatternsQuery = async () => {
 };
 
 export const getClassQuery = async (patternId) => {
-    const ClassResponse = await fetch(`http://localhost:5000/api/posts/fetchClass/${patternId}`, {
+    const ClassResponse = await fetch(`${baseUrl}api/posts/fetchClass/${patternId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -21,7 +23,7 @@ export const getClassQuery = async (patternId) => {
 };
 
 export const getSemesterQuery = async (classId) => {
-    const SemesterResponse = await fetch(`http://localhost:5000/api/posts/fetchSmesters/${classId}`, {
+    const SemesterResponse = await fetch(`${baseUrl}api/posts/fetchSmesters/${classId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -32,7 +34,7 @@ export const getSemesterQuery = async (classId) => {
 };
 
 export const getSubjectsQuery = async (semesterId) => {
-    const SubjectResponse = await fetch(`http://localhost:5000/api/posts/fetchSubjects/${semesterId}`, {
+    const SubjectResponse = await fetch(`${baseUrl}api/posts/fetchSubjects/${semesterId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -43,7 +45,7 @@ export const getSubjectsQuery = async (semesterId) => {
 };
 
 export const getPracticlesQuery = async (subjectId) => {
-    const SubjectResponse = await fetch(`http://localhost:5000/api/posts/fetchPracticles/${subjectId}`, {
+    const SubjectResponse = await fetch(`${baseUrl}api/posts/fetchPracticles/${subjectId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -54,7 +56,7 @@ export const getPracticlesQuery = async (subjectId) => {
 };
 
 export const getPracticleQuery = async (practicleId) => {
-    const PracticleResponse = await fetch(`http://localhost:5000/api/posts/fetchPost/${practicleId}`, {
+    const PracticleResponse = await fetch(`${baseUrl}api/posts/fetchPost/${practicleId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

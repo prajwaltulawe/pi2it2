@@ -1,0 +1,506 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "pii2it2",
+    "dateExported": "2023-07-30T19:24:22.556Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "c28e2526-9623-423b-a339-25d2a0670b05",
+            "name": "admin",
+            "containerId": "",
+            "created": "2023-07-17T18:43:11.285Z",
+            "sortNum": 5000
+        },
+        {
+            "_id": "2b40020c-f80d-4caa-8d95-46a4d55e6f26",
+            "name": "auth",
+            "containerId": "",
+            "created": "2023-07-17T18:14:06.502Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "posts",
+            "containerId": "",
+            "created": "2023-07-17T18:14:06.572Z",
+            "sortNum": 20000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "58c195be-46ff-4d58-8635-17edf26a057e",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "2b40020c-f80d-4caa-8d95-46a4d55e6f26",
+            "name": "create new user",
+            "url": "localhost:5000/api/auth/createUser",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-07-17T18:14:06.571Z",
+            "modified": "2023-07-17T18:26:00.109Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"prajwal tulawe\",\n  \"email\": \"pajya@students.isquareit.edu.in\",\n  \"password\": \"123\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "44e1a224-0778-450a-849d-b92da67b4640",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "2b40020c-f80d-4caa-8d95-46a4d55e6f26",
+            "name": "login using credentials",
+            "url": "localhost:5000/api/auth/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-07-17T18:14:06.572Z",
+            "modified": "2023-07-17T18:32:57.133Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"pajya@students.isquareit.edu.in\",\n  \"password\": \"123\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5ae209c3-276b-4aad-8cc4-a2f7962eb65b",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "2b40020c-f80d-4caa-8d95-46a4d55e6f26",
+            "name": "get user data",
+            "url": "localhost:5000/api/auth/getUser",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-07-17T18:14:06.573Z",
+            "modified": "2023-07-17T18:14:06.573Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ3NGYwNzhmYjBjNmQ0OThjNmYyODJhIn0sImlhdCI6MTY4NTQ2OTE3Mn0.QFVcx8t8eryZpySkKDRNIG7TnInfxtRj0HRWuISNDkY"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a8787175-3ccd-453f-a597-8558ee59a507",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "fetch posts",
+            "url": "localhost:5000/api/posts/fetchPost/64b58f0dbd8c877d06ba45de",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-07-17T18:14:06.574Z",
+            "modified": "2023-07-26T19:13:06.382Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "c4c52e11-3b27-4159-8cc6-c5647d5fa30a",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "fetch class",
+            "url": "localhost:5000/api/posts/fetchClass",
+            "method": "GET",
+            "sortNum": 51250,
+            "created": "2023-07-24T18:39:41.499Z",
+            "modified": "2023-07-25T19:39:39.055Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"patten_id\": \"64b58f0dbd8c877d06ba45de\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5d68f88c-8571-42bc-9323-949fd02ce152",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "fetch smesters",
+            "url": "localhost:5000/api/posts/fetchSmesters/64b5975a0d744c14a70d4b9e",
+            "method": "GET",
+            "sortNum": 51875,
+            "created": "2023-07-24T18:45:52.434Z",
+            "modified": "2023-07-25T19:53:59.504Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"classId\": \"64b5975a0d744c14a70d4b9e\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "4eb885d1-8d6a-4f5d-be46-bc1474fe0386",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "fetch subjects",
+            "url": "localhost:5000/api/posts/fetchSubjects",
+            "method": "GET",
+            "sortNum": 52187.5,
+            "created": "2023-07-24T18:52:44.729Z",
+            "modified": "2023-07-24T18:55:09.273Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"semesterId\": \"64b5a3e0320bfda3249a65ef\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "09d89580-3ee3-46cc-90c3-b3c1e87f2ead",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "fetch practicles",
+            "url": "localhost:5000/api/posts/fetchPracticles",
+            "method": "GET",
+            "sortNum": 52421.9,
+            "created": "2023-07-24T18:56:49.207Z",
+            "modified": "2023-07-24T18:59:07.234Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"subjectId\": \"64b5a4ac75bcbddabcbd6d8a\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "dbb6eccd-daf1-4af3-9774-e36aec89a4a8",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "fetch pattern",
+            "url": "localhost:5000/api/posts/fetchPattern",
+            "method": "GET",
+            "sortNum": 52500,
+            "created": "2023-07-24T18:26:49.222Z",
+            "modified": "2023-07-24T18:38:41.585Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "f9c61000-b187-422e-9749-bd1d9009d0a7",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "add post",
+            "url": "localhost:5000/api/posts/addPost",
+            "method": "POST",
+            "sortNum": 55000,
+            "created": "2023-07-17T20:38:11.766Z",
+            "modified": "2023-07-28T08:46:24.314Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"practicleId\": \"64b6a675dc143466819a5390\",\n  \"link\": \"https://www.aitpune.com/Documents/IT/Sll.pdf\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "863e52ba-c780-4458-9756-677b5443ad87",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "update post",
+            "url": "localhost:5000/api/posts/updatePost/64c40078ebd13a74e3da0f79",
+            "method": "PUT",
+            "sortNum": 70000,
+            "created": "2023-07-17T18:14:06.576Z",
+            "modified": "2023-07-28T19:35:31.423Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"link\": \"https://www.aitpune.com/Documents/IT/Syllabus-beit.pdf\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "30172ed4-b337-4c50-b48f-7a7ad34931c7",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "like post ",
+            "url": "localhost:5000/api/posts/likePost/64c415cbbb386db69f49454c",
+            "method": "PUT",
+            "sortNum": 75000,
+            "created": "2023-07-29T17:10:24.573Z",
+            "modified": "2023-07-30T18:07:32.533Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "04275889-c3a4-4e4b-b5cc-72ef54232413",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "dislike post ",
+            "url": "localhost:5000/api/posts/dislikePost/64c415cbbb386db69f49454c",
+            "method": "PUT",
+            "sortNum": 77500,
+            "created": "2023-07-29T19:11:57.109Z",
+            "modified": "2023-07-29T19:12:18.327Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2ce9efab-b0ee-487e-873b-b64972c8e41c",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "be3b6b94-a835-476a-83cc-abfe8ff3c537",
+            "name": "delete note",
+            "url": "localhost:5000/api/posts/deletePost/64b6d5d7eb64aec15567ad97",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2023-07-17T18:14:06.577Z",
+            "modified": "2023-07-18T18:11:51.008Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiNTg3Yjg0ZjExYWRmZjJlNzFjNmI0In0sImlhdCI6MTY4OTY5MDIwNn0.a8x4K2j3uiUE1MprwlCKvJgWU5Rj4EmXpT5YSx-ASug"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "123fa686-8bdb-4cb0-a785-a10dedbaaef5",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "c28e2526-9623-423b-a339-25d2a0670b05",
+            "name": "add pattern",
+            "url": "localhost:5000/api/admin/addPattern",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-07-17T18:43:42.863Z",
+            "modified": "2023-07-17T18:57:17.939Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"year\": 2019\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "cac1cd7e-e154-4e98-950e-e647f496a715",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "c28e2526-9623-423b-a339-25d2a0670b05",
+            "name": "add class",
+            "url": "localhost:5000/api/admin/addClass",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2023-07-17T18:59:45.631Z",
+            "modified": "2023-07-25T19:41:02.483Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"patternId\": \"64b58f0dbd8c877d06ba45de\",\n  \"class\": \"ENTC\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "920ea914-9838-4b5d-b729-075c8241a27f",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "c28e2526-9623-423b-a339-25d2a0670b05",
+            "name": "add semester",
+            "url": "localhost:5000/api/admin/addSemester",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2023-07-17T19:25:19.453Z",
+            "modified": "2023-07-17T20:25:32.593Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"patternId\": \"64b58f0dbd8c877d06ba45de\",\n  \"classId\": \"64b5975a0d744c14a70d4b9e\",\n  \"semester\": 3\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0c9ff410-0df4-43ac-b5fd-2ab3c0c6367d",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "c28e2526-9623-423b-a339-25d2a0670b05",
+            "name": "add subject",
+            "url": "localhost:5000/api/admin/addSubject",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2023-07-17T20:20:20.012Z",
+            "modified": "2023-07-17T20:29:31.524Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"patternId\": \"64b58f0dbd8c877d06ba45de\",\n  \"classId\": \"64b5975a0d744c14a70d4b9e\",\n  \"semId\": \"64b5a3e0320bfda3249a65ef\",\n  \"subject\": \"Logic Design and Computer Organization Lab\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "7929ad6e-e109-48d2-b86a-47325ba4e738",
+            "colId": "1dc2eae7-70e7-4d57-b852-487df05525e4",
+            "containerId": "c28e2526-9623-423b-a339-25d2a0670b05",
+            "name": "add practicle",
+            "url": "localhost:5000/api/admin/addPracticle",
+            "method": "POST",
+            "sortNum": 130000,
+            "created": "2023-07-17T20:33:28.382Z",
+            "modified": "2023-07-17T20:57:34.778Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"patternId\": \"64b58f0dbd8c877d06ba45de\",\n  \"classId\": \"64b5975a0d744c14a70d4b9e\",\n  \"semId\": \"64b5a3e0320bfda3249a65ef\",\n  \"subjectId\": \"64b5a4ac75bcbddabcbd6d8a\",\n  \"practicle\": \"Design& simulation of single instruction CPU\"\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

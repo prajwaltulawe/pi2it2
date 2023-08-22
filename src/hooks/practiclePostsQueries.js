@@ -1,5 +1,7 @@
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
 export const addPostQuery = async ({link, practicleId}) => {
-    const addPostResponse = await fetch(`http://localhost:5000/api/posts/addPost`, {
+    const addPostResponse = await fetch(`${baseUrl}api/posts/addPost`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -13,7 +15,7 @@ export const addPostQuery = async ({link, practicleId}) => {
 };
 
 export const deletePostQuery = async (postId) => {
-    const deletePostResponse = await fetch(`http://localhost:5000/api/posts/deletePost/${postId}`, {
+    const deletePostResponse = await fetch(`${baseUrl}api/posts/deletePost/${postId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -26,7 +28,7 @@ export const deletePostQuery = async (postId) => {
 };
 
 export const editPostQuery = async ({editPostId, editPostLink}) => {
-    const editPostResponse = await fetch(`http://localhost:5000/api/posts/updatePost/${editPostId}`, {
+    const editPostResponse = await fetch(`${baseUrl}api/posts/updatePost/${editPostId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -40,7 +42,7 @@ export const editPostQuery = async ({editPostId, editPostLink}) => {
 };
 
 export const likePostQuery = async (postId) => {
-    const likePostResponse = await fetch(`http://localhost:5000/api/posts/likePost/${postId}`, {
+    const likePostResponse = await fetch(`${baseUrl}api/posts/likePost/${postId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -53,7 +55,7 @@ export const likePostQuery = async (postId) => {
 };
 
 export const dislikePostQuery = async (postId) => {
-    const dislikePostResponse = await fetch(`http://localhost:5000/api/posts/dislikePost/${postId}`, {
+    const dislikePostResponse = await fetch(`${baseUrl}api/posts/dislikePost/${postId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
