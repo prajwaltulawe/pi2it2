@@ -1,4 +1,4 @@
-const baseUrl = process.env.REACT_APP_BASE_URL;
+const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:5000/";
 
 export const getPatternsQuery = async () => {
     const PatternResponse = await fetch(`${baseUrl}api/posts/fetchPattern`, {
