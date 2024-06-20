@@ -41,11 +41,23 @@ const Pattern = (props) => {
       <>
         <h1>PATTERNS</h1>
         <div className="container m-auto mt-4 d-flex flex-column"> 
-          {data && data.map((pattern) => {
-            return (
-              <button className="btn btn-primary mt-2" key={pattern._id} onClick={() => setNxtTarget(pattern.year, pattern._id)}> {pattern.year} </button>
-              );
-            })}
+              <div class="row">
+                <div class="col-sm-6">
+
+                {data && data.map((pattern) => {
+                return (
+                  <div className="card">
+                    <div class="card-body">
+                      <h5 class="card-title"><b>{pattern.year}</b></h5>
+                      <p class="card-text">View all available classes of pattern {pattern.year}.</p>
+                      <button className="btn btn-primary mt-2" key={pattern._id} onClick={() => setNxtTarget(pattern.year, pattern._id)}> View classes of {pattern.year} </button>
+                    </div>
+                  </div>
+                  );
+                })}
+
+                </div>  
+              </div>
         </div>
       </>
     );

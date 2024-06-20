@@ -49,6 +49,7 @@ const Login = (props) => {
                     <label htmlFor="email">Email address</label>
                     <input type="email" className="form-control mt-2" id="email" name="email" onChange={onChange} value={credentials.email} aria-describedby="email"
                         placeholder="Enter email" />
+                    <small id="emailHelp" class="form-text text-muted">Please use your college email id!</small>
                 </div>
                 <div className="form-group mt-2">
                     <label htmlFor="password">Password</label>

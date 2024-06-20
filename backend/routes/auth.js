@@ -55,7 +55,7 @@ router.post(
       res.json({ success, authToken });
       success = false;
     } catch (error) {
-      res.status(500).json( {success, error: "Some Error Occoured"});
+      res.status(500).json( {success, error: `${error}`});
     }
   }
 );
