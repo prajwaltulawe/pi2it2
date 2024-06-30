@@ -483,6 +483,16 @@ iframe {
   justify-content: space-between;
   margin: 0 auto;
 }
+.grid-1 {
+  grid-template-columns: 100%;
+}
+.grid-4 {
+  grid-template-columns: 23% 23% 23% 23%;
+}
+
+.grid-5 {
+  grid-template-columns: 19% 19% 19% 19% 19%;
+}
 
 .ag-courses_box {
   display: -webkit-box;
@@ -524,7 +534,6 @@ iframe {
   transform: scale(10);
 }
 .ag-courses-item_title {
-  min-height: 87px;
   margin: 0 0 25px;
 
   overflow: hidden;
@@ -536,12 +545,26 @@ iframe {
   z-index: 2;
   position: relative;
 }
+.ag-courses-item_subtitle {
+  font-size: 1.2rem;
+}
+
+.ag-courses-item_mintitle{
+  font-size: 1rem;
+}
+
 .ag-courses-item_date-box {
-  font-size: 18px;
+  font-size: 1rem;
   color: #FFF;
 
   z-index: 2;
   position: relative;
+}
+.float-right{
+  float: right;
+}
+.user_name{
+  font-size: .8rem;
 }
 .ag-courses-item_date {
   font-weight: bold;
