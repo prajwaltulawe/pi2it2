@@ -38,16 +38,30 @@ const Subject = () => {
       }
 
     return (
-        <>
-          <h1>Subjects of Semester {semester.stage}</h1>
-          <div className="container m-auto mt-4 d-flex flex-column"> 
-          {data && data.map((subjectItem) => {
-              return (
-              <button className="btn btn-primary mt-2" key={subjectItem._id} onClick={() => setNxtTarget(subjectItem.subject, subjectItem._id)}> {subjectItem.subject} </button>
-                );
-              })}
-          </div>
-        </>
+      <div className="container-cards">
+        <div className="wrap-cards p-l-55 p-r-55 p-t-65 p-b-54">
+          <form className="login100-form">
+            <span className="container-cards-title">Subjects of Semester {semester.stage}</span>
+            <div className="wrap-input100 validate-input m-b-23">
+              <div className="ag-format-container grid-4">
+
+                {data && data.map((subjectItem) => {
+                  return (
+                    <div className="ag-courses_box" key={subjectItem._id} onClick={() => setNxtTarget(subjectItem.subject, subjectItem._id)}>
+                      <div className="ag-courses_item card-bg3">
+                          <a className="ag-courses-item_link">
+                              <div className="ag-courses-item_title ag-courses-item_subtitle">{subjectItem.subject}</div>
+                          </a>
+                      </div>
+                    </div>                  
+                  );
+                })}
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     );
 };
 

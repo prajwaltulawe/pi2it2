@@ -11,7 +11,7 @@ export const getPatternsQuery = async () => {
     return PatternResponse.json();
 };
 
-export const getClassQuery = async (patternId) => {
+export const getCourseQuery = async (patternId) => {
     const ClassResponse = await fetch(`${baseUrl}api/posts/fetchClass/${patternId}`, {
         method: "GET",
         headers: {

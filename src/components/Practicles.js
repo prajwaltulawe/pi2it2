@@ -38,16 +38,32 @@ const Practicles = () => {
       }
 
     return (
-        <>
-          <h1>Practicles of {subject.stage} Subject</h1>
-          <div className="container m-auto mt-4 d-flex flex-column"> 
-          {data && data.map((practicleItem) => {
-              return (
-              <button className="btn btn-primary mt-2" key={practicleItem._id} onClick={() => setNxtTarget(practicleItem.practicle, practicleItem._id)}> {practicleItem.practicle} </button>
-                );
-              })}
-          </div>
-        </>
+      <div className="container-cards">
+        <div className="wrap-cards p-l-55 p-r-55 p-t-65 p-b-54">
+          <form className="login100-form">
+            <span className="container-cards-title"> Practicles of {subject.stage} </span>
+            <div className="wrap-input100 validate-input m-b-23">
+              <div className="ag-format-container grid-5">
+              
+                {data && data.map((practicleItem) => {
+                  return (
+                    <div className="ag-courses_box" key={practicleItem._id} onClick={() => setNxtTarget(practicleItem.practicle, practicleItem._id)}>
+                      <div className="ag-courses_item card-bg3">
+                          <a className="ag-courses-item_link">
+                              <div className="ag-courses-item_title ag-courses-item_mintitle">
+                                {practicleItem.practicle}
+                              </div>
+                          </a>
+                      </div>
+                    </div>
+                  );
+                })}
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     );
 };
 

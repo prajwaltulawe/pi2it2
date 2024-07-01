@@ -42,23 +42,48 @@ const Login = (props) => {
     }
 
     return (
-        <div className="container m-auto mt-4"> 
-        <h1>LOGIN</h1>
-            <form onSubmit={handleLoginSubmit}>
-                <div className="form-group">
-                    <label htmlFor="email">Email address</label>
-                    <input type="email" className="form-control mt-2" id="email" name="email" onChange={onChange} value={credentials.email} aria-describedby="email"
-                        placeholder="Enter email" />
-                    <small id="emailHelp" class="form-text text-muted">Please use your college email id!</small>
-                </div>
-                <div className="form-group mt-2">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control mt-2" id="password" name="password" onChange={onChange} value={credentials.password} placeholder="Password" />
-                </div>
-                <button type="submit" className="btn btn-primary mt-2" >
-                    Login
-                </button>
-            </form>
+        <div className="container-login100">
+            <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+
+                <form className="login100-form validate-form" onSubmit={handleLoginSubmit}>
+                    <span className="login100-form-title p-b-49">
+                        Login
+                    </span>
+
+                    <div className="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
+                        <span className="label-input100" htmlFor="email">Email Id</span>
+                        <input className="input100" type="email" id="email" name="email" onChange={onChange} value={credentials.email} placeholder="Type your email" required></input>
+                        <span className="focus-input100" data-symbol="&#xf206;"></span>
+                    </div>
+
+                    <div className="wrap-input100 validate-input" data-validate="Password is required">
+                        <span className="label-input100" htmlFor="password" >Password</span>
+                        <input className="input100" type="password" id="password" name="password" onChange={onChange} value={credentials.password} placeholder="Type your password" required></input>
+                        <span className="focus-input100" data-symbol="&#xf190;"></span>
+                    </div>
+                    
+                    <div className="text-right p-t-8 p-b-31">
+                        <a onClick={() => navigate('/forgetPassword')}>
+                            Forgot password?
+                        </a>
+                    </div>
+                    
+                    <div className="container-login100-form-btn">
+                        <div className="wrap-login100-form-btn">
+                            <div className="login100-form-bgbtn"></div>
+                            <button className="login100-form-btn" type="submit" onClick={() => navigate('/fetchPattern')}>
+                                Login
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="txt1 text-center p-t-54 p-b-20">
+                        <span>
+                            Don't have a account ? <a onClick={() => navigate('/signup')}>Sign Up</a>
+                        </span>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

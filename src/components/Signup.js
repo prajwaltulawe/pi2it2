@@ -49,35 +49,41 @@ const Signup = () => {
   };
 
   return (
-    <div className="container m-auto mt-4">
-      <h1>SIGN UP</h1>
-      <form onSubmit={handleSignupSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input type="text" className="form-control mt-2" id="name" name="name" onChange={onChange}
-            value={credentials.name} aria-describedby="name" placeholder="Enter Name" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email address</label>
-          <input type="email" className="form-control mt-2" id="email" name="email" onChange={onChange}
-            value={credentials.email} aria-describedby="email" placeholder="Enter email" />
-            <small>Please use your college email id!</small>
-        </div>
-        <div className="form-group mt-2">
-          <label htmlFor="password">Password</label>
-          <input type="password" className="form-control mt-2" id="password" name="password" onChange={onChange}
-            value={credentials.password} placeholder="Password" />
-        </div>
-        <div className="form-group mt-2">
-          <label htmlFor="cpassword">Confirm Password</label>
-          <input type="password" className="form-control mt-2" id="cpassword" name="cpassword" onChange={onChange}
-            value={credentials.cpassword} placeholder="Confirm Password" />
-        </div>
-        <button type="submit" disabled={(credentials.password !== credentials.cpassword) && credentials.name !== "" && credentials.email !== ""} className="btn btn-primary mt-2">
-          Sign up
-        </button>
-      </form>
-    </div>
+    <div className="container-login100">
+			<div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				<form className="login100-form validate-form">
+					<span className="login100-form-title p-b-20">
+						Signup
+					</span>
+
+					<div className="wrap-input100 validate-input" data-validate = "Username is reauired">
+					</div>
+
+					<div className="txt1 text-center p-t-20 p-b-20">
+						<span>
+							For integrity reasons you can only signup using I2IT collage email id.
+						</span>
+					</div>
+
+          <div className="container-login100-form-btn p-t-10">
+						<div className="wrap-login100-form-btn">
+							<div className="login100-form-bgbtn"></div>
+							<button className="login100-form-btn bg3" onClick={() => navigate('/setPassword')}>
+                <i className="fa fa-google p-r-10"></i> 
+								Signup with Google
+							</button>
+						</div>
+					</div>
+
+          <div className="txt1 text-center p-t-54 p-b-20">
+						<span>
+							Already have a account ? <a onClick={() => navigate('/')}>Login</a>
+						</span>
+					</div>
+
+				</form>
+			</div>
+		</div>
   );
 };
 

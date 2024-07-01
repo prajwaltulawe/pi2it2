@@ -7,7 +7,7 @@ import { useAlertContext } from "../context/alert/alertContext";
 
 const Semester = () => {
     const navigate = useNavigate();
-    const { classs, setSemester } = useTargetContext();
+    const { courses, setSemester } = useTargetContext();
     const { showAlert } = useAlertContext();
 
     const { data, mutate } = useMutation(getSemesterQuery, {
@@ -25,7 +25,7 @@ const Semester = () => {
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
-            mutate(classs.id);
+            mutate(courses.id);
         }else{
           navigate('/login');
         }
@@ -38,16 +38,32 @@ const Semester = () => {
       }
 
     return (
-        <>
-          <h1>Semester of {classs.stage} Class</h1>
-          <div className="container m-auto mt-4 d-flex flex-column"> 
-          {data && data.map((semItem) => {
-              return (
-              <button className="btn btn-primary mt-2" key={semItem._id} onClick={() => setNxtTarget(semItem.semester, semItem._id)}> {semItem.semester} </button>
-                );
-              })}
-          </div>
-        </>
+      <div className="container-cards">
+        <div className="wrap-cards p-l-55 p-r-55 p-t-65 p-b-54">
+          <form className="login100-form">
+            <span className="container-cards-title">Semesters of {courses.stage} course</span>
+            <div className="wrap-input100 validate-input m-b-23">
+              <div className="ag-format-container grid-4">
+
+                {data && data.map((semItem) => {
+                  return (
+                    <div className="ag-courses_box" key={semItem._id} onClick={() => setNxtTarget(semItem.semester, semItem._id)}>
+                        <div className="ag-courses_item card-bg3">
+                            <a href="#" className="ag-courses-item_link">
+                                <div className="ag-courses-item_title">
+                                    Sem {semItem.semester}    
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                  );
+                })}
+                
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     );
 };
 

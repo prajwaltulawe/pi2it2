@@ -34,32 +34,35 @@ const Pattern = (props) => {
 
       const setNxtTarget = (stage, id) => {
         setPattern({stage: stage, id: id});
-        navigate('/fetchClass');
+        navigate('/fetchCourses');
       }
 
     return (
-      <>
-        <h1>PATTERNS</h1>
-        <div className="container m-auto mt-4 d-flex flex-column"> 
-              <div class="row">
-                <div class="col-sm-6">
-
-                {data && data.map((pattern) => {
-                return (
-                  <div className="card">
-                    <div class="card-body">
-                      <h5 class="card-title"><b>{pattern.year}</b></h5>
-                      <p class="card-text">View all available classes of pattern {pattern.year}.</p>
-                      <button className="btn btn-primary mt-2" key={pattern._id} onClick={() => setNxtTarget(pattern.year, pattern._id)}> View classes of {pattern.year} </button>
-                    </div>
-                  </div>
-                  );
-                })}
-
-                </div>  
+      <div className="container-cards" >
+			  <div className="wrap-cards p-l-55 p-r-55 p-t-65 p-b-54">
+				  <form className="login100-form">
+            <span className="container-cards-title">Patterns</span>
+					    <div className="wrap-input100 validate-input m-b-23">
+                <div className="ag-format-container">
+                  {data && data.map((pattern) => {
+                    return (
+                      <div className="ag-courses_box" key={pattern._id} onClick={() => setNxtTarget(pattern.year, pattern._id)}>
+                        <div className="ag-courses_item card-bg3">
+                            <a href="#" className="ag-courses-item_link">
+                                <div className="ag-courses-item_title">{pattern.year}</div>
+                                <div className="ag-courses-item_date-box">
+                                  <span className="ag-courses-item_date">View courses of {pattern.year} pattern </span>
+                                </div>
+                            </a>
+                        </div>
+                      </div>
+                      );
+                    })}
+                </div>
               </div>
+          </form>
         </div>
-      </>
+      </div>
     );
 };
 
