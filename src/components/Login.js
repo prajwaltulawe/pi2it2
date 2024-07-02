@@ -71,7 +71,8 @@ const Login = (props) => {
                     <div className="container-login100-form-btn">
                         <div className="wrap-login100-form-btn">
                             <div className="login100-form-bgbtn"></div>
-                            <button className="login100-form-btn" type="submit" onClick={() => navigate('/fetchPattern')}>
+                            {/* <button className="login100-form-btn" type="submit" onClick={() => navigate('/fetchPattern')}> */}
+                            <button className="login100-form-btn" type="submit">
                                 Login
                             </button>
                         </div>
