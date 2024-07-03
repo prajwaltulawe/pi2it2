@@ -35,6 +35,7 @@ router.post("/addClass",
       const classs = new Class({
         class: req.body.class,
         pattern_id: req.body.patternId,
+        classDescription: req.body.classDescription
       });
       const saveClass = await classs.save();
       res.json(saveClass);

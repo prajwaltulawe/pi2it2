@@ -5,8 +5,11 @@ import { getPracticleQuery } from '../hooks/nextTargetQueries';
 import { addPostQuery, deletePostQuery, editPostQuery, likePostQuery, dislikePostQuery} from '../hooks/practiclePostsQueries';
 import { useTargetContext } from "../context/nextTarget/targetContext";
 import { useAlertContext } from "../context/alert/alertContext";
+import LoadingBar from 'react-top-loading-bar'
 
 const Practicle = () => {
+    const progressRef = useRef(null)
+
     const navigate = useNavigate();
     const { practicles} = useTargetContext();
     const { showAlert } = useAlertContext();
@@ -22,6 +25,7 @@ const Practicle = () => {
     const { mutate : getPracticleData } = useMutation(getPracticleQuery, {
         mutationKey: "getPracticle",
         onSuccess: (result) => {
+            progressRef.current.complete()
             if (result.status !== 204) {
               showAlert("Available Practicle Links Fetched !", "warning");
               setPosts(result);
@@ -35,6 +39,7 @@ const Practicle = () => {
     })
     useEffect(() => {
         if (localStorage.getItem('token') && practicles) {
+          progressRef.current.continuousStart()
           getPracticleData(practicles.id);
         }else{
           navigate('/login');
@@ -191,113 +196,120 @@ const Practicle = () => {
     }
 
     return (
-      <>
-        <div className="container-cards">
-          <div className="wrap-cards p-l-55 p-r-55 p-t-65 p-b-54">
-              <span className="container-cards-title">
-                Links for {practicles.stage} Practicle
-              </span>
+      <div className="container-cards">
+        <LoadingBar color='#f11946' ref={progressRef} shadow={true}/>
+        <div className="wrap-cards p-l-55 p-r-55 p-t-65 p-b-54">
+            <span className="container-cards-title">
+              Links for {practicles.stage} Practicle
+            </span>
 
-              <div className="wrap-input100 validate-input m-b-23">
+            <div className="wrap-input100 validate-input m-b-23">
 
-                <div className="ag-courses-item_date-box m-t-30">
-                  <button className="btn btn-primary col-6" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add New Post </button>
-                </div>
-
-                {/* ADD MODAL */}
-                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">Add Post</h1> <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div className="modal-body">
-                        <form action="" method="post">
-                          <div className="mb-3">
-                            <label htmlFor="link" className="form-label">Link</label>
-                            <input type="text" className="form-control" id="link" name="link" value={addPostLink} onChange={(e) => setAddPostLink(e.target.value)}/>
-                          </div>
-                        </form>
-                      </div>
-                      <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary" onClick={addPostFunction}>Add Post</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-          
-                {/* EDIT MODAL */}
-                <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Post</h1> <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div className="modal-body">
-                        <form action="" method="post">
-                          <div className="mb-3">
-                            <label htmlFor="link" className="form-label">Link</label>
-                            <input type="text" className="form-control" id="link" name="link" value={editPostLink} onChange={(e) => {setEditPostLink(e.target.value)}}/>
-                          </div>
-                        </form>
-                      </div>
-                      <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary" onClick={()=>editPostFunction()}>Edit Post</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="ag-format-container grid-1">
-
-                  {/* ALL POSTS */}
-                  {posts && posts.map((practicleItem) => {
-                    return (
-                      <div className="ag-courses_box">
-                        <div className="d-flex flex-row justify-content-between col-10">
-                          <small>{practicleItem.username}</small>
-                          <small>{practicleItem.timestamp && practicleItem.timestamp.substring(0, 10)}</small>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between col-12">
-                          <button className="btn btn-primary col-10" key={practicleItem._id}> {practicleItem.link}</button>
-                          <div  className="d-flex">
-                            <div className="d-flex align-items-center flex-column">
-                              <button className="fs-3 mx-1" style={{ background:"none", border:"none" }} onClick={() => likePostFunction(practicleItem._id)} >&#128077;</button>
-                              <small>{practicleItem.likes ? practicleItem.likes.length : "0"}</small>
-                            </div>
-                            <div className="d-flex align-items-center flex-column">
-                              <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => dislikePostFunction(practicleItem._id)} >&#128078;</button>
-                              <small>{practicleItem.dislikes ? practicleItem.dislikes.length : "0"}</small>
-                            </div>
-                            
-                            {/* POST AUTHOR OPTIONS */}
-                            {practicleItem.username === localStorage.getItem('userName') && (
-                              <>
-                                <div className="d-flex align-items-center flex-column">
-                                  <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => setEditPost(practicleItem)} data-bs-toggle="modal" data-bs-target="#editModal">&#128394;</button>
-                                  <small>Edit</small>
-                                </div>
-                                <div className="d-flex align-items-center flex-column">
-                                  <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() =>deletePostFunction(practicleItem._id)}>&#10060;</button>
-                                  <small>Delete</small>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                </div>
-
+              <div className="ag-courses-item_date-box m-t-30">
+                <button className="btn btn-primary col-6" data-bs-toggle="modal" data-bs-target="#exampleModal"> Add New Post </button>
               </div>
 
-          </div>
+              {/* ADD MODAL */}
+              <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h1 className="modal-title fs-5" id="exampleModalLabel">Add Post</h1> <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                      <form action="" method="post">
+                        <div className="mb-3">
+                          <label htmlFor="link" className="form-label">Link</label>
+                          <input type="text" className="form-control" id="link" name="link" value={addPostLink} onChange={(e) => setAddPostLink(e.target.value)}/>
+                        </div>
+                      </form>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">Close</button>
+                      <button type="button" className="btn btn-primary" onClick={addPostFunction}>Add Post</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              {/* EDIT MODAL */}
+              <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Post</h1> <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                      <form action="" method="post">
+                        <div className="mb-3">
+                          <label htmlFor="link" className="form-label">Link</label>
+                          <input type="text" className="form-control" id="link" name="link" value={editPostLink} onChange={(e) => {setEditPostLink(e.target.value)}}/>
+                        </div>
+                      </form>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" ref={closeAddPostModal} data-bs-dismiss="modal">Close</button>
+                      <button type="button" className="btn btn-primary" onClick={()=>editPostFunction()}>Edit Post</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="ag-format-container grid-1">
+
+                {/* ALL POSTS */}
+                {posts && posts.map((practicleItem) => {
+                  return (
+                    <div className="ag-courses_box">
+                      <div className="d-flex flex-row justify-content-between col-10">
+                        <small>{practicleItem.username}</small>
+                        <small>{practicleItem.timestamp && practicleItem.timestamp.substring(0, 10)}</small>
+                      </div>
+                      <div className="d-flex align-items-center justify-content-between col-12">
+                        <button className="btn btn-primary col-10" key={practicleItem._id}> {practicleItem.link}</button>
+                        <div  className="d-flex">
+                          <div className="d-flex align-items-center flex-column">
+                            <button className="fs-3 mx-1" style={{ background:"none", border:"none" }} onClick={() => likePostFunction(practicleItem._id)} >&#128077;</button>
+                            <small>{practicleItem.likes ? practicleItem.likes.length : "0"}</small>
+                          </div>
+                          <div className="d-flex align-items-center flex-column">
+                            <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => dislikePostFunction(practicleItem._id)} >&#128078;</button>
+                            <small>{practicleItem.dislikes ? practicleItem.dislikes.length : "0"}</small>
+                          </div>
+                          
+                          {/* POST AUTHOR OPTIONS */}
+                          {practicleItem.username === localStorage.getItem('userName') && (
+                            <>
+                              <div className="d-flex align-items-center flex-column">
+                                <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() => setEditPost(practicleItem)} data-bs-toggle="modal" data-bs-target="#editModal">&#128394;</button>
+                                <small>Edit</small>
+                              </div>
+                              <div className="d-flex align-items-center flex-column">
+                                <button className="fs-3 mx-2" style={{ background:"none", border:"none" }} onClick={() =>deletePostFunction(practicleItem._id)}>&#10060;</button>
+                                <small>Delete</small>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                {posts.length === 0  && (
+                  <div className="ag-courses_box">
+                    <div className="d-flex flex-row justify-content-between col-10">
+                    </div>
+                    <div className="d-flex align-items-center justify-content-between col-12">
+                      <span style={{ textAlign:"center", width:"100%" }}><b> No assignment links available!</b> </span>                        
+                    </div>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
         </div>
-      </>
+      </div>
     );
 };
 

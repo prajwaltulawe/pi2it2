@@ -521,7 +521,7 @@ iframe {
   padding: 30px 20px;
 
   overflow: hidden;
-
+  cursor: pointer;
   position: relative;
 }
 .ag-courses-item_link:hover,

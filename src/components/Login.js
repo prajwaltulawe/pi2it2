@@ -1,16 +1,20 @@
-import React, {useState} from "react";
+import React, {useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { postLoginQuery } from '../hooks/authoriztionQueries';
 import { useAlertContext } from "../context/alert/alertContext";
+import LoadingBar from 'react-top-loading-bar'
 
 const Login = (props) => {
     const [credentials, setCredentials] = useState({email: "", password: ""});
+    const progressRef = useRef(null)
+
     const navigate = useNavigate();
     const { showAlert } = useAlertContext();
 
     const { mutate } = useMutation(postLoginQuery, {
         onSuccess: (result) => {
+            progressRef.current.complete()
             if (result && result.success) {
               localStorage.setItem('token', result.authToken);
               localStorage.setItem('userName', result.userName);
@@ -31,6 +35,7 @@ const Login = (props) => {
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         try {
+            progressRef.current.continuousStart()
             mutate({ email: credentials.email, password: credentials.password});
         } catch (error) {
             showAlert("Some error occoured. Plz try again later !", "warning");
@@ -43,6 +48,7 @@ const Login = (props) => {
 
     return (
         <div className="container-login100">
+            <LoadingBar color='#f11946' ref={progressRef} shadow={true}/>
             <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 
                 <form className="login100-form validate-form" onSubmit={handleLoginSubmit}>
@@ -63,7 +69,7 @@ const Login = (props) => {
                     </div>
                     
                     <div className="text-right p-t-8 p-b-31">
-                        <a onClick={() => navigate('/forgetPassword')}>
+                        <a href="#" onClick={() => navigate('/forgetPassword')}>
                             Forgot password?
                         </a>
                     </div>
@@ -80,7 +86,7 @@ const Login = (props) => {
 
                     <div className="txt1 text-center p-t-54 p-b-20">
                         <span>
-                            Don't have a account ? <a onClick={() => navigate('/signup')}>Sign Up</a>
+                            Don't have a account ? <a href="#" onClick={() => navigate('/signup')}>Sign Up</a>
                         </span>
                     </div>
                 </form>

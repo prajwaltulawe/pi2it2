@@ -9,6 +9,10 @@ const ClassSchema = new Schema({
         type: String,
         required: true
     },
+    classDescription: {
+        type: String,
+        required: true
+    },
 });
 const Class = mongoose.model("class", ClassSchema);
 module.exports = Class;
