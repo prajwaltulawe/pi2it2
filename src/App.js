@@ -1,5 +1,4 @@
 import "./App.css";
-import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Alert from "./components/Alert";
@@ -15,17 +14,12 @@ import Subject from "./components/Subject";
 import Practicles from "./components/Practicles";
 import Practicle from "./components/Practicle";
 import AlertContextProvider, { useAlertContext } from "./context/alert/alertContext";
-import TargetContextProvider from "./context/nextTarget/targetContext";
+import TargetContextProvider, { useTargetContext } from "./context/nextTarget/targetContext";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 const queryClient = new QueryClient();
 
 function App() {
   const { alert } = useAlertContext();
-  
-  useEffect(() => {
-    const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:5000/";
-    fetch(baseUrl)
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -52,7 +46,9 @@ function AppWithContext() {
   return (
     <AlertContextProvider>
       <TargetContextProvider>
-        <App />
+        <GoogleOAuthProvider clientId="394715928187-o8usjrlgfc5uf2v15orqjjls593ekf1f.apps.googleusercontent.com">
+          <App />
+        </GoogleOAuthProvider>;
       </TargetContextProvider>
     </AlertContextProvider>
   );

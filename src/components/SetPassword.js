@@ -1,11 +1,46 @@
-import React, {useState} from "react";
+// import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
 import { postLoginQuery } from '../hooks/authoriztionQueries';
 import { useAlertContext } from "../context/alert/alertContext";
 
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 const SetPassword = (props) => {
-    const [credentials, setCredentials] = useState({email: "", password: ""});
+
+  const { userDetailsToken } = useParams();
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const code = new URLSearchParams(window.location.search).get('code');
+      if (!code) {
+        setError('No authorization code found');
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/auth/oAuth?code=${code}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        console.log('data', data);
+        setUserData(data);
+      } catch (error) {
+        console.log(error);
+        setError('Failed to fetch user data');
+      }
+    };
+
+    fetchUserData();
+  }, [userDetailsToken]);
+
+
+
+  const [credentials, setCredentials] = useState({email: "", password: ""});
     const navigate = useNavigate();
     const { showAlert } = useAlertContext();
 
