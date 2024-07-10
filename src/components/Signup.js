@@ -31,6 +31,7 @@ const Signup = () => {
     },
   });
 
+  /*
   function  openWindow(url){
     window.location.href = url
   }  
@@ -48,20 +49,38 @@ const Signup = () => {
       showAlert("Some error occoured. Plz try again later !", "warning");
     }
   };
+*/
 
-  const onChange = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value });
-  };
 
-  const onFailure = (response) => {
-    console.error('Google Sign-In failed:', response);
-  };
+const handleSignupSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+
+    const options = {
+      redirect_uri: "http://127.0.0.1:5000/api/auth/oauth",
+      client_id: "394715928187-o8usjrlgfc5uf2v15orqjjls593ekf1f.apps.googleusercontent.com",
+      access_type: "offline",
+      response_type: "code",
+      prompt: "consent",
+      scope: [
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email",
+      ].join(" "),
+    };
+    const qs = new URLSearchParams(options);
+    console.log(`${rootUrl}?${qs.toString()}`)
+    window.location.href = `${rootUrl}?${qs.toString()}` 
+  } catch (error) {
+    showAlert("Some error occoured. Plz try again later !", "warning");
+  }
+};
 
   return (
     <div className="container-login100">
 			<div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				{/* <form className="login100-form validate-form" onSubmit={handleSignupSubmit}> */}
-				<form className="login100-form validate-form">
+				<form className="login100-form validate-form" onSubmit={handleSignupSubmit}>
+				{/* <form className="login100-form validate-form"> */}
 					<span className="login100-form-title p-b-20">
 						Signup
 					</span>

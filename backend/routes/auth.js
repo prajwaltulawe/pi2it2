@@ -22,25 +22,6 @@ async function getUserData(access_token) {
 
 }
 
-router.post('/google-signin', async (req, res) => {
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-  const { tokenId } = req.body;
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: tokenId,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    console.log(ticket)
-    const payload = ticket.getPayload();
-    const { email, name } = payload;
-
-    res.status(200).json({ email, name });
-  } catch (error) {
-    res.status(400).json({ error: 'Invalid token' });
-  }
-});
-
-
 router.get("/oAuth", async function (req, res) {
   const code = req.query.code;
   try {
