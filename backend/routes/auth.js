@@ -19,10 +19,9 @@ async function getUserData(access_token) {
   const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`)
   const data = await response.json();
   console.log("data", data)
-
 }
 
-router.get("/oAuth", async function (req, res) {
+router.get("/oAuthUserData", async function (req, res) {
   const code = req.query.code;
   try {
     const redirectUrl = "http://127.0.0.1:5000/api/auth/oauth";

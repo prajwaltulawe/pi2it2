@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { postSignupQuery } from "../hooks/authoriztionQueries";
 import { useAlertContext } from "../context/alert/alertContext";
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Signup = () => {
   const [credentials, setCredentials] = useState({
@@ -30,57 +32,23 @@ const Signup = () => {
       console.error("Error submitting data:", error.message);
     },
   });
-
-  /*
-  function  openWindow(url){
-    window.location.href = url
-  }  
+  
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/auth/request",
-      {
-        method: "post"
-      })
-      const data = await response.json()
-      console.log(data)
-      openWindow(data.url)
-    } catch (error) {
-      showAlert("Some error occoured. Plz try again later !", "warning");
+      await login()
+    } catch(err){
+
     }
-  };
-*/
-
-
-const handleSignupSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-
-    const options = {
-      redirect_uri: "http://127.0.0.1:5000/api/auth/oauth",
-      client_id: "394715928187-o8usjrlgfc5uf2v15orqjjls593ekf1f.apps.googleusercontent.com",
-      access_type: "offline",
-      response_type: "code",
-      prompt: "consent",
-      scope: [
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ].join(" "),
-    };
-    const qs = new URLSearchParams(options);
-    console.log(`${rootUrl}?${qs.toString()}`)
-    window.location.href = `${rootUrl}?${qs.toString()}` 
-  } catch (error) {
-    showAlert("Some error occoured. Plz try again later !", "warning");
   }
-};
+  const login = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+  });
 
   return (
     <div className="container-login100">
 			<div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 				<form className="login100-form validate-form" onSubmit={handleSignupSubmit}>
-				{/* <form className="login100-form validate-form"> */}
 					<span className="login100-form-title p-b-20">
 						Signup
 					</span>
@@ -97,8 +65,7 @@ const handleSignupSubmit = async (e) => {
           <div className="container-login100-form-btn p-t-10">
 						<div className="wrap-login100-form-btn">
 							<div className="login100-form-bgbtn"></div>
-							{/* <button className="login100-form-btn bg3" onClick={() => navigate('/setPassword')}> */}
-							<button className="login100-form-btn bg3" type="submit">
+							<button className="login100-form-btn bg3" type="submit" >
                 <i className="fa fa-google p-r-10"></i> 
 								Signup with Google
 							</button>
