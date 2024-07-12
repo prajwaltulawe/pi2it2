@@ -1,4 +1,5 @@
 import "./App.css";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Alert from "./components/Alert";
@@ -46,7 +47,7 @@ function AppWithContext() {
   return (
     <AlertContextProvider>
       <TargetContextProvider>
-        <GoogleOAuthProvider clientId="394715928187-o8usjrlgfc5uf2v15orqjjls593ekf1f.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
           <App />
         </GoogleOAuthProvider>;
       </TargetContextProvider>

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { postSignupQuery } from "../hooks/authoriztionQueries";
 import { useAlertContext } from "../context/alert/alertContext";
-import { GoogleLogin } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
 
 const Signup = () => {
@@ -19,8 +18,8 @@ const Signup = () => {
   const { mutate } = useMutation(postSignupQuery, {
     onSuccess: (result) => {
       if (result && result.success) {
-        navigate("/login");
-        showAlert("Account created successfully. Login to access", "warning");
+        navigate("/setPassword");
+        showAlert("Set new password", "warning");
       } else {
         showAlert("Some error occoured. Plz try again later !", "warning");
       }
