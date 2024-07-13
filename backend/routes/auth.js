@@ -16,55 +16,30 @@ const fetchUser = require("../middleware/fetchUser");
 let success = false;
 
 async function getUserData(access_token) {
-  const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`)
-  const data = await response.json();
-  console.log("data", data)
+
 }
 
-router.get("/oAuthUserData", async function (req, res) {
-  const code = req.query.code;
+router.post("/getOAuthUserData", async function (req, res) {
+  const access_token = req.body.access_token;
   try {
-    const redirectUrl = "http://127.0.0.1:5000/api/auth/oauth";
-    const oAuth2Client = new OAuth2Client(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      redirectUrl
-    );
+    const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`)
+    const data = await response.json();
+    const {name, email} = data;
+    
+    // CHECK WHETHER USER EXISTS OR NOT
+    let user = await User.findOne({ email: email });
+    if (user) {
+      success = false;
+      return res
+        .status(409)
+        .json({ success, error: "Email id already registered..! Please use different email id or login with same" });
+    }
 
-    const res = await oAuth2Client.getToken(code);
-    await oAuth2Client.setCredentials(res.tokens)
-    console.log("token received")
-    const user = oAuth2Client.credentials;
-    console.log(user)
-    await getUserData(user.access_token)
+    success = true;
+    res.json({ success, data: {name, email} });
   } catch (error) {
-    console.log(error)
+    res.status(500).json( {success, error: `${error}`});
   }
-})
-
-// OAUTH FOR CREATING GOOGLE LINK
-router.post("/request", async function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Referrer-Policy", "no-referrer-when-downgrade");
-
-  const redirectUrl = "http://127.0.0.1:5000/api/auth/oauth";
-
-  const oAuth2Client = new OAuth2Client(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    redirectUrl
-  )
-
-  const authorizeUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope:[
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email"
-    ],
-    prompt: "consent"
-  })
-
-  res.json({url: authorizeUrl})
 })
 
 // CREATE A USER USING POST "API/AUTH/CREATEUSER"
@@ -89,9 +64,10 @@ router.post(
     try {
       let user = await User.findOne({ email: req.body.email });
       if (user) {
+        success = false;
         return res
           .status(409)
-          .json({ success, error: "Email id already registered..!" });
+          .json({ success, error: "Email id already registered..! Please use different email id or login with same" });
       }
 
       const salt = await bycrypt.genSalt(10);

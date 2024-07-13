@@ -11,6 +11,17 @@ export const postSignupQuery = async (userData) => {
     return SignupResponse.json();
 };
 
+export const postUserCredentials = async (userData) => {
+    const UserCredentialsResponse = await fetch(`${baseUrl}api/auth/getOAuthUserData`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+    });
+    return UserCredentialsResponse.json();
+};
+
 export const postLoginQuery = async (userData) => {
     const loginResponse = await fetch(`${baseUrl}api/auth/login`, {
         method: "POST",

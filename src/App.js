@@ -15,7 +15,7 @@ import Subject from "./components/Subject";
 import Practicles from "./components/Practicles";
 import Practicle from "./components/Practicle";
 import AlertContextProvider, { useAlertContext } from "./context/alert/alertContext";
-import TargetContextProvider, { useTargetContext } from "./context/nextTarget/targetContext";
+import TargetContextProvider from "./context/nextTarget/targetContext";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 const queryClient = new QueryClient();
 

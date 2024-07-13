@@ -65,7 +65,7 @@ const ForgetPassword = (props) => {
 					</div>
                     <div className="txt1 text-center p-t-20 p-b-20">
 						<span>
-							<a onClick={() => navigate('/')}>Back to Login</a>
+							<a href="#" onClick={() => navigate('/')}>Back to Login</a>
 						</span>
 					</div>
 				</form>

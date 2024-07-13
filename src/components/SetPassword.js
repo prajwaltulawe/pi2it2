@@ -1,117 +1,127 @@
-// import React, {useState} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from "@tanstack/react-query";
-import { postLoginQuery } from '../hooks/authoriztionQueries';
+import { postSignupQuery } from '../hooks/authoriztionQueries';
 import { useAlertContext } from "../context/alert/alertContext";
-
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import LoadingBar from 'react-top-loading-bar'
 
 const SetPassword = (props) => {
-
-  const { userDetailsToken } = useParams();
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
+  const progressRef = useRef(null)
+  const [credentials, setCredentials] = useState({name: "", email: "", pass: "", cpass: ""});
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const code = new URLSearchParams(window.location.search).get('code');
-      if (!code) {
-        setError('No authorization code found');
-        return;
-      }
+    const storedEmail = localStorage.getItem('signupEmail');
+    const storedUserName = localStorage.getItem('signupUserName');
 
-      try {
-        const response = await fetch(`http://localhost:5000/api/auth/oAuth?code=${code}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-        const data = await response.json();
-        console.log('data', data);
-        setUserData(data);
-      } catch (error) {
-        console.log(error);
-        setError('Failed to fetch user data');
-      }
-    };
-
-    fetchUserData();
-  }, [userDetailsToken]);
-
-
-
-  const [credentials, setCredentials] = useState({email: "", password: ""});
-    const navigate = useNavigate();
-    const { showAlert } = useAlertContext();
-
-    const { mutate } = useMutation(postLoginQuery, {
-        onSuccess: (result) => {
-            if (result && result.success) {
-              localStorage.setItem('token', result.authToken);
-              localStorage.setItem('userName', result.userName);
-              navigate("/fetchPattern");
-              showAlert("Successfully LogedIn", "warning");
-            } else {
-              showAlert("Some error occoured. Plz try again later !", "warning");
-            }
-            if (result && result.success === false) {
-                showAlert(result.error, "warning");
-              }
-          },
-          onError: (error) => {
-            console.error("Error submitting data:", error.message);
-          }
-    })
-
-    const handleLoginSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            mutate({ email: credentials.email, password: credentials.password});
-        } catch (error) {
-            showAlert("Some error occoured. Plz try again later !", "warning");
-        }
-    };
-
-    const onChange = (e) => {
-        setCredentials({...credentials, [e.target.name]: e.target.value})
+    if (storedEmail) {
+      setCredentials(prevCredentials => ({
+        ...prevCredentials,
+        email: storedEmail
+      }));
     }
 
-    return (
-      <div className="container-login100">
-        <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-          <form className="login100-form validate-form">
-            <span className="login100-form-title p-b-49">
-              Set Password
-            </span>
+    if (storedUserName) {
+      setCredentials(prevCredentials => ({
+        ...prevCredentials,
+        name: storedUserName
+      }));
+    }
+  }, []);
 
-            <div className="wrap-input100 validate-input m-b-23" data-validate="Password is required">
-              <span className="label-input100">Password</span>
-              <input className="input100" type="password" name="pass" placeholder="Type your password" required></input>
-              <span className="focus-input100" data-symbol="&#xf190;"></span>
-            </div>
+  const navigate = useNavigate();
+  const { showAlert } = useAlertContext();
 
-                      <div className="wrap-input100 validate-input" data-validate="Password is required">
-              <span className="label-input100">Confirm Password</span>
-              <input className="input100" type="password" name="pass" placeholder="Confirm your password" required></input>
-              <span className="focus-input100" data-symbol="&#xf190;"></span>
-            </div>
-            
-            <div className="text-right p-t-8 p-b-31">
-            </div>
-            
-            <div className="container-login100-form-btn">
-              <div className="wrap-login100-form-btn">
-                <div className="login100-form-bgbtn"></div>
-                <button className="login100-form-btn">
-                  Set Password
-                </button>
-              </div>
-            </div>
+  const { mutate } = useMutation(postSignupQuery, {
+      onSuccess: (result) => {
+          if (result && result.success) {
+            localStorage.setItem('token', result.authToken);
+            localStorage.setItem('userName', result.userName);
+            progressRef.current.complete()
+            navigate("/");
+            showAlert("Account created successfully. You can login!", "warning");
+          } else {
+            progressRef.current.complete()
+            showAlert("Some error occoured. Plz try again later !", "warning");
+          }
+          if (result && result.success === false) {
+              progressRef.current.complete()
+              showAlert(result.error, "warning");
+            }
+        },
+        onError: (error) => {
+          console.error("Error submitting data:", error.message);
+        }
+  })
 
-          </form>
-        </div>
+  const handleSetPasswordSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        if (credentials.pass === credentials.cpass) {
+          progressRef.current.continuousStart()
+          mutate({ name: credentials.name, email: credentials.email, password: credentials.pass});
+        }else{
+          progressRef.current.complete()
+          showAlert("Password do not match.", "warning");
+        }
+      } catch (error) {
+        progressRef.current.complete()
+        showAlert("Some error occoured. Plz try again later !", "warning");
+      }
+  };
+
+  const onChange = (e) => {
+      setCredentials({...credentials, [e.target.name]: e.target.value})
+  }
+
+  return (
+    <div className="container-login100">
+      <LoadingBar color='#f11946' ref={progressRef} shadow={true}/>
+      <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+        <form className="login100-form validate-form" onSubmit={handleSetPasswordSubmit}>
+          <span className="login100-form-title p-b-49">
+            Set Password
+          </span>
+
+          <div className="wrap-input100 validate-input m-b-23" data-validate="User Name is required">
+            <span className="label-input100">User Name</span>
+            <input className="input100" type="text" name="name" id="name" placeholder={credentials.name} disabled required></input>
+            <span className="focus-input100" data-symbol="&#xf206;"></span>
+          </div>
+
+          <div className="wrap-input100 validate-input m-b-23" data-validate="Password is required">
+            <span className="label-input100">Password</span>
+            <input className="input100" type="password" name="pass" id="pass" onChange={onChange} value={credentials.password} placeholder="Type your password" required></input>
+            <span className="focus-input100" data-symbol="&#xf190;"></span>
+          </div>
+
+          <div className="wrap-input100 validate-input" data-validate="Password is required">
+            <span className="label-input100">Confirm Password</span>
+            <input className="input100" type="password" name="cpass" id="cpass" onChange={onChange} value={credentials.cpassword} placeholder="Confirm your password" required></input>
+            <span className="focus-input100" data-symbol="&#xf190;"></span>
+          </div>
+          
+          <div className="text-right p-t-8 p-b-31">
+          </div>
+          
+          <div className="container-login100-form-btn">
+            <div className="wrap-login100-form-btn">
+              <div className="login100-form-bgbtn"></div>
+              <button className="login100-form-btn">
+                Set Password
+              </button>
+            </div>
+          </div>
+
+          <div className="txt1 text-center p-t-54 p-b-20">
+						<span>
+							Back to login ? <a onClick={() => navigate('/')}>Login</a>
+						</span>
+					</div>
+
+        </form>
       </div>
-    );
+    </div>
+  );
 };
 
 export default SetPassword;
