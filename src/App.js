@@ -31,7 +31,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Login />} />
             <Route exact path="/forgetPassword" element={<ForgetPassword />} />
-            <Route exact path="/resetPassword/:token" element={<ResetPassword />} />
+            <Route exact path="/resetPassword/:id/:token" element={<ResetPassword />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/setPassword" element={<SetPassword />} />
             <Route exact path="/fetchPattern" element={<Pattern />} />

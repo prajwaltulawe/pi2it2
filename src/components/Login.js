@@ -69,9 +69,9 @@ const Login = (props) => {
                     </div>
                     
                     <div className="text-right p-t-8 p-b-31">
-                        {/* <a href="#" onClick={() => navigate('/forgetPassword')}>
+                        <a href="#" onClick={() => navigate('/forgetPassword')}>
                             Forgot password?
-                        </a> */}
+                        </a>
                     </div>
                     
                     <div className="container-login100-form-btn">

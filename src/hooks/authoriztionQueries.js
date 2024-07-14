@@ -1,4 +1,5 @@
-const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:5000/";
+// const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:5000/";
+const baseUrl = "http://localhost:5000/";
 
 export const postSignupQuery = async (userData) => {
     const SignupResponse = await fetch(`${baseUrl}api/auth/createUser`, {
@@ -13,6 +14,17 @@ export const postSignupQuery = async (userData) => {
 
 export const postUserCredentials = async (userData) => {
     const UserCredentialsResponse = await fetch(`${baseUrl}api/auth/getOAuthUserData`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+    });
+    return UserCredentialsResponse.json();
+};
+
+export const getResetPasswordLink = async (userData) => {
+    const UserCredentialsResponse = await fetch(`${baseUrl}api/auth/getResetPasswordLink`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

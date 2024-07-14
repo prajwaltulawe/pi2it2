@@ -12,7 +12,7 @@ redisClient.connect().then(() => {
 
 const bycrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "qwert";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const fetchUser = require("../middleware/fetchUser");
 let success = false;
@@ -106,6 +106,46 @@ router.post(
       success = false;
     } catch (error) {
       res.status(500).json( {success, error: `${error}`});
+    }
+  }
+);
+
+// PASSWORD RESET LINK USING POST "API/AUTH/GETRESETPASSWORDLINK"
+router.post(
+  "/getResetPasswordLink",
+  [
+    body("email", "Invalid EmaIl").isEmail(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      success = false;
+      return res.status(406).json({ success, error: errors.array()[0].msg });
+    }
+
+    const { email } = req.body;
+    // CHECK WHETHER USER EXISTS OR NOT
+    try {
+      let user = await User.findOne({ email });
+      if (!user) {
+        success = false;
+        return res.status(400).json({ success, error: "Email Id not registered !" });
+      }
+    
+      // CREATE ONE TIME LINK FOR USER
+      const secret = JWT_SECRET + user.password;
+      const payload = {
+        email: user.email,
+        id: user.id,
+      };
+      const token = jwt.sign(payload, secret, { expiresIn: '15m' });
+      const redirectUrl = process.env.RESET_PASSWORD_URL + user.id + "/" + token;
+
+      console.log(redirectUrl);
+      success = true;
+      res.json({ success });
+    } catch (error) {
+      res.status(500).json( {success, error: "Some Error Occoured"});
     }
   }
 );
