@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Alert from "./components/Alert";
@@ -21,6 +21,9 @@ const queryClient = new QueryClient();
 
 function App() {
   const { alert } = useAlertContext();
+  useEffect(() => {
+    fetch(process.env.REACT_APP_BASE_URL) 
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

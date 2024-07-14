@@ -1,12 +1,14 @@
+const fetch = require('node-fetch');
 const express = require("express");
-const User = require("../models/User");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-const fetch = require('node-fetch');
+const User = require("../models/User");
 
-require('dotenv').config();
-const {OAuth2Client} = require("google-auth-library")
-const bodyParser = require('body-parser');
+const {redisClient} = require('../db');
+redisClient.on('error', err => console.log('Redis Client Error', err));
+redisClient.connect().then(() => {
+    console.log('Connected to Redis...');
+});
 
 const bycrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -14,10 +16,6 @@ const JWT_SECRET = "qwert";
 
 const fetchUser = require("../middleware/fetchUser");
 let success = false;
-
-async function getUserData(access_token) {
-
-}
 
 router.post("/getOAuthUserData", async function (req, res) {
   const access_token = req.body.access_token;
@@ -35,8 +33,16 @@ router.post("/getOAuthUserData", async function (req, res) {
         .json({ success, error: "Email id already registered..! Please use different email id or login with same" });
     }
 
-    success = true;
-    res.json({ success, data: {name, email} });
+    if(email.endsWith("students.isquareit.edu.in")){
+      await redisClient.setEx(email, 300, "true");
+      success = true;
+      res.json({ success, data: {name, email} });
+    }else{  
+      success = false;
+      return res
+        .status(409)
+        .json({ success, error: "Email id is not associated with I SQUARE IT Organization!" });
+    }
   } catch (error) {
     res.status(500).json( {success, error: `${error}`});
   }
@@ -60,8 +66,19 @@ router.post(
       return res.status(406).json({ success, error: errors.array()[0].msg });
     }
 
-    // CHECK WHETHER USER EXISTS OR NOT
     try {
+      
+      // CHECK IF VISITED THROUGH OAUTH, IN REDIS
+      const redisUser = await redisClient.get(req.body.email, (err, data) => {
+        if (err) throw err;
+        if (data !== null) {
+          success=false;
+          return res.status(400).json({ success, error: "Invalid Request !" });
+        }
+      });
+      redisClient.del(req.body.email) ? redisUser : "" 
+
+      // CHECK WHETHER USER EXISTS OR NOT
       let user = await User.findOne({ email: req.body.email });
       if (user) {
         success = false;

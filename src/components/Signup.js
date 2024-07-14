@@ -29,6 +29,7 @@ const Signup = () => {
       }
     },
     onError: (error) => {
+      progressRef.current.complete()
       showAlert("Some error occoured. Plz try again later !", "warning");
     },
   });
@@ -36,7 +37,6 @@ const Signup = () => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
-      progressRef.current.continuousStart()
       getToken()
     } catch(err){
       showAlert(err, "warning");
@@ -47,6 +47,7 @@ const Signup = () => {
     onSuccess: tokenResponse => {
       const access_token = tokenResponse.access_token;
       mutate({ access_token });
+      progressRef.current.continuousStart()
     },
     onError: (error) => showAlert(error, "warning")
   });
@@ -65,7 +66,7 @@ const Signup = () => {
 
 					<div className="txt1 text-center p-t-20 p-b-20">
 						<span>
-							For integrity purpose only students with I2IT collage email id are allowed to signup using.
+							For integrity purpose only students with I2IT collage email id are allowed to signup.
 						</span>
 					</div>
 

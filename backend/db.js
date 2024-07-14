@@ -1,5 +1,7 @@
+const redis = require('redis');
 const mongoose = require('mongoose');
 require('dotenv').config();
+
 const connectionURI = process.env.CONNNECTION_URI || "mongodb://localhost:27017/pi2it2";
 mongoose.connect(connectionURI, 
   {
@@ -15,17 +17,15 @@ const connectToMongo = () =>{
     });
 }
 
-module.exports = connectToMongo;
-
-/*
-import { createClient } from 'redis';
-const client = createClient({
-    password: 'pPE9GYOO08LNjG2ltDM1noCkpPv7LupZ',
+const redisClient = redis.createClient({
+    password: process.env.REDIS_PASSWORD,
     socket: {
-        host: 'redis-10763.c14.us-east-1-2.ec2.redns.redis-cloud.com',
-        port: 10763
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
     }
-});
-client.on('error', err => console.log('Redis Client Error', err));
-await client.connect();
-*/
+})
+
+module.exports = {
+  connectToMongo,
+  redisClient
+};
