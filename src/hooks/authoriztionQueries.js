@@ -34,6 +34,17 @@ export const getResetPasswordLink = async (userData) => {
     return UserCredentialsResponse.json();
 };
 
+export const postResetPasswordQuery = async (userData) => {
+    const resetPasswordResponse = await fetch(`${baseUrl}api/auth/resetPassword`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+    });
+    return resetPasswordResponse.json();
+};
+
 export const postLoginQuery = async (userData) => {
     const loginResponse = await fetch(`${baseUrl}api/auth/login`, {
         method: "POST",

@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
+const nodemailer = require("nodemailer");
 
 const {redisClient} = require('../db');
 redisClient.on('error', err => console.log('Redis Client Error', err));
@@ -141,9 +142,73 @@ router.post(
       const token = jwt.sign(payload, secret, { expiresIn: '15m' });
       const redirectUrl = process.env.RESET_PASSWORD_URL + user.id + "/" + token;
 
-      console.log(redirectUrl);
-      success = true;
-      res.json({ success });
+      const auth = nodemailer.createTransport({
+        service: "gmail",
+        secure : true,
+        port : 465,
+        auth: {
+            user: "prajwalt_td2106@students.isquareit.edu.in",
+            pass: "hosa uzkf bgew fblo "
+
+        }
+      });
+
+      const receiver = {
+          from : "prajwalt_td2106@students.isquareit.edu.in",
+          to : user.email,
+          subject : "Password reset link!",
+          text : `Dear ${user.name},
+          
+We have received a request to reset your password for your account associated with email. Please click the link below to reset your password:
+          
+${redirectUrl}
+          
+If you did not request a password reset, please ignore this email. Your password will remain unchanged.
+          
+Important Notice:
+This email is sent from an address associated with I SQUARE IT; however, it is related to ${user.name} and not affiliated with or endorsed by I SQUARE IT in any way.
+          
+Thank you,
+Prajwal Tulawe
+Alumni 2023-24
+https://portfolio-prajwaltulawe.vercel.app/
+          
+If you need further assistance, feel free to reach out to us.`
+      };
+
+      auth.sendMail(receiver, (error, emailResponse) => {
+          if(error){
+            throw error;
+          }
+          success = true;
+          res.json({ success });
+      });
+
+    } catch (error) {
+      res.status(500).json( {success, error: "Some Error Occoured"});
+    }
+  }
+);
+
+// PASSWORD RESET LINK USING POST "API/AUTH/RESETPASSWORD"
+router.post(
+  "/resetPassword",
+  async (req, res) => {
+
+    const { id, token, password } = req.body;
+    console.log( id, token, password)
+
+    // CHECK WHETHER USER EXISTS OR NOT
+    try {
+      let user = await User.findById(id)
+      if (!user) {
+        success = false;
+        return res.status(400).json({ success, error: "Invalid token !" });
+      }
+      console.log(user)
+      const secret = JWT_SECRET + user.password;
+      const payload = jwt.verify(token, secret);
+      console.log(payload)
     } catch (error) {
       res.status(500).json( {success, error: "Some Error Occoured"});
     }
